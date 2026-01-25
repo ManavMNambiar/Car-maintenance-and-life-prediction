@@ -1,3 +1,4 @@
+
 def maintenance_status(module, remaining_years):
 
     rules = {
@@ -168,3 +169,4 @@ final_summary = {
 }
 
 final_summary
+
