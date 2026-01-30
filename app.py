@@ -67,14 +67,13 @@ brakes_model = joblib.load("brakes_model.pkl")
 electronics_model = joblib.load("electronics_model.pkl")
 body_model = joblib.load("body_model.pkl")
 
-# ---------------------------------
 # Utility functions
-# ---------------------------------
+
 def maintenance_status(module, years):
     rules = {
         "Engine": (2, 5),
         "Transmission": (2, 5),
-        "Brakes & Suspension": (2, 5),
+        "Brakes & Suspension": (2.5, 4),
         "Electronics": (2, 4),
         "Body": (3, 6)
     }
@@ -88,9 +87,7 @@ def maintenance_status(module, years):
     else:
         return "Healthy"
 
-# ---------------------------------
-# ENGINE INPUTS
-# ---------------------------------
+
 st.header("🔧 Engine")
 
 Oil_Level = st.number_input("Oil Level (%)", 0.0, 100.0, 60.0)
@@ -112,9 +109,7 @@ engine_input_df = pd.DataFrame([{
 engine_years = engine_model.predict(engine_input_df)[0]
 
 
-# ---------------------------------
-# TRANSMISSION INPUTS
-# ---------------------------------
+
 st.header("⚙️ Transmission")
 
 Gear_Slip_Frequency = st.number_input("Gear Slip Frequency", 0, 30, 1, step=1)
@@ -132,9 +127,7 @@ transmission_input_df = pd.DataFrame([{
 transmission_years = transmission_model.predict(transmission_input_df)[0]
 
 
-# ---------------------------------
-# BRAKES INPUTS
-# ---------------------------------
+
 st.header("🛑 Brakes & Suspension")
 
 Brake_Pad_Wear = st.number_input("Brake Pad Wear (%)", 0.0, 100.0, 50.0)
@@ -153,9 +146,7 @@ brakes_years = brakes_model.predict(brakes_input_df)[0]
 ransmission_years = transmission_model.predict(transmission_input_df)[0]
 
 
-# ---------------------------------
-# ELECTRONICS INPUTS
-# ---------------------------------
+
 st.header("🔌 Electronics")
 
 Battery_Health = st.number_input("Battery Health (%)", 0.0, 100.0, 80.0)
@@ -172,9 +163,7 @@ electronics_years = electronics_model.predict(electronics_input_df)[0]
 
 
 
-# ---------------------------------
-# BODY INPUTS
-# ---------------------------------
+
 st.header("🧱 Body / Structural")
 
 Rust_Level = st.number_input("Rust Level (%)", 0.0, 100.0, 20.0)
@@ -190,9 +179,9 @@ body_input_df = pd.DataFrame([{
 body_years = body_model.predict(body_input_df)[0]
 
 
-# ---------------------------------
+
 # PREDICTION
-# ---------------------------------
+
 if st.button("🔍 Predict Car Health"):
     """
     engine_years = engine_model.predict(engine_input)[0]
@@ -226,9 +215,7 @@ if st.button("🔍 Predict Car Health"):
     st.subheader("📊 Component Health Summary")
     st.dataframe(car_health.style.format({"Remaining Years": "{:.2f}"}))
 
-    # ---------------------------------
-    # WEIGHTED OVERALL HEALTH
-    # ---------------------------------
+    # Overall Car Health Calculation
     weights = {
         "Engine": 0.40,
         "Transmission": 0.25,
